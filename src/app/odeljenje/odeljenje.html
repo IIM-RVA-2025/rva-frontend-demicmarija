@@ -1,0 +1,150 @@
+<div class="odeljenja-page">
+
+  <h1 class="page-title">Odeljenja</h1>
+
+  <!-- prvo čekamo bolnice za <select> -->
+  <ng-container *ngIf="(bolnice$ | async) as bolniceLista; else loading">
+
+    <!-- forma -->
+    <section class="card odeljenje-form-card">
+      <div class="card-header-row">
+        <div>
+          <h2 class="card-title">
+            {{ editMode ? 'Izmena odeljenja' : 'Dodavanje novog odeljenja' }}
+          </h2>
+          <p class="card-subtitle">
+            Popuni polja i klikni na dugme
+            <strong>{{ editMode ? 'Sačuvaj' : 'Dodaj' }}</strong>.
+          </p>
+        </div>
+      </div>
+
+      <form class="form-grid" [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="field">
+          <label for="naziv">Naziv</label>
+          <input
+            id="naziv"
+            type="text"
+            class="text-input"
+            placeholder="Unesi naziv odeljenja"
+            formControlName="naziv"
+          />
+        </div>
+
+        <div class="field">
+          <label for="lokacija">Lokacija</label>
+          <input
+            id="lokacija"
+            type="text"
+            class="text-input"
+            placeholder="Unesi lokaciju"
+            formControlName="lokacija"
+          />
+        </div>
+
+        <div class="field">
+          <label for="bolnica">Bolnica</label>
+          <select
+            id="bolnica"
+            class="text-input"
+            formControlName="bolnicaId"
+          >
+            <option [ngValue]="null">– izaberi bolnicu –</option>
+            <option *ngFor="let b of bolniceLista" [value]="b.id">
+              {{ b.naziv }}
+            </option>
+          </select>
+        </div>
+
+        <!-- dugmad desno -->
+        <div class="field button-field">
+          <button class="primary-btn" type="submit">
+            {{ editMode ? 'Sačuvaj' : 'Dodaj' }}
+          </button>
+
+          <button
+            *ngIf="editMode"
+            type="button"
+            class="secondary-btn"
+            (click)="cancelEdit()"
+          >
+            Otkaži
+          </button>
+        </div>
+      </form>
+    </section>
+
+    <!-- Tabela -->
+    <section class="card odeljenje-table-card">
+      <div class="table-top">
+        <div class="table-title-block">
+          <h2 class="card-title">Lista odeljenja</h2>
+          <p class="card-subtitle">
+            Pregled svih odeljenja sa mogućnošću pretrage, izmene i brisanja.
+          </p>
+        </div>
+
+        <div class="search-inline">
+          <label for="pretragaOdeljenje">
+            Pretraga (naziv, lokacija ili bolnica):
+          </label>
+          <input
+            id="pretragaOdeljenje"
+            type="text"
+            class="text-input"
+            placeholder="Kreni da kucaš..."
+            [formControl]="filterControl"
+          />
+        </div>
+      </div>
+
+      <div class="table-wrapper" *ngIf="odeljenjaFiltrirana$ | async as odeljenja">
+        <table class="bolnica-table">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Naziv</th>
+              <th>Lokacija</th>
+              <th>Bolnica</th>
+              <th class="akcije-col">Akcije</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let o of odeljenja">
+              <td>{{ o.id }}</td>
+              <td>{{ o.naziv }}</td>
+              <td>{{ o.lokacija }}</td>
+              <td>{{ o.bolnica?.naziv }}</td>
+              <td class="akcije-col">
+                <button
+                  class="btn-ghost"
+                  type="button"
+                  (click)="edit(o)"
+                >
+                  Izmeni
+                </button>
+                <button
+                  class="btn-outline-danger"
+                  type="button"
+                  (click)="delete(o)"
+                >
+                  Obriši
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="no-data" *ngIf="odeljenja.length === 0">
+          Nema odeljenja za zadatu pretragu.
+        </div>
+      </div>
+    </section>
+
+  </ng-container>
+
+  <ng-template #loading>
+    Učitavanje podataka...
+  </ng-template>
+
+</div>

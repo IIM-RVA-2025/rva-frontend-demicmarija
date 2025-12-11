@@ -1,0 +1,135 @@
+<div class="bolnice-page">
+
+  <h1 class="page-title">Bolnice</h1>
+
+  <!-- KARTICA: FORMA ZA DODAVANJE / IZMENE -->
+  <section class="card bolnica-form-card">
+    <div class="card-header-row">
+      <div>
+        <h2 class="card-title">
+          {{ editMode ? 'Izmena bolnice' : 'Dodavanje nove bolnice' }}
+        </h2>
+        <p class="card-subtitle">
+          Popuni polja i klikni na dugme
+          <strong>{{ editMode ? 'Sačuvaj' : 'Dodaj' }}</strong>.
+        </p>
+      </div>
+    </div>
+
+    <form class="form-grid" [formGroup]="form" (ngSubmit)="onSubmit()">
+      <div class="field">
+        <label for="naziv">Naziv</label>
+        <input
+          id="naziv"
+          type="text"
+          class="text-input"
+          placeholder="Unesi naziv bolnice"
+          formControlName="naziv"
+        />
+      </div>
+
+      <div class="field">
+        <label for="adresa">Adresa</label>
+        <input
+          id="adresa"
+          type="text"
+          class="text-input"
+          placeholder="Unesi adresu"
+          formControlName="adresa"
+        />
+      </div>
+
+      <div class="field">
+        <label for="budzet">Budžet</label>
+        <input
+          id="budzet"
+          type="number"
+          class="text-input"
+          min="0"
+          formControlName="budzet"
+        />
+      </div>
+
+      <div class="field button-field">
+        <button class="primary-btn" type="submit">
+          {{ editMode ? 'Sačuvaj' : 'Dodaj' }}
+        </button>
+
+        <button
+          *ngIf="editMode"
+          type="button"
+          class="secondary-btn"
+          (click)="cancelEdit()"
+        >
+          Otkaži
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <!-- KARTICA: PRETRAGA + TABELA -->
+  <section class="card bolnica-table-card">
+    <div class="table-top">
+      <div class="table-title-block">
+        <h2 class="card-title">Lista bolnica</h2>
+        <p class="card-subtitle">
+          Pregled svih bolnica sa mogućnošću pretrage, izmene i brisanja.
+        </p>
+      </div>
+
+      <div class="search-inline">
+  <label for="pretraga">Pretraga (naziv ili adresa):</label>
+  <input
+    id="pretraga"
+    type="text"
+    class="text-input"
+    placeholder="Kreni da kucaš..."
+    [formControl]="filterControl"
+  />
+</div>
+    </div>
+
+    <div class="table-wrapper" *ngIf="bolniceFiltrirane$ | async as bolnice">
+      <table class="bolnica-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Naziv</th>
+            <th>Adresa</th>
+            <th>Budžet</th>
+            <th class="akcije-col">Akcije</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let b of bolnice">
+            <td>{{ b.id }}</td>
+            <td>{{ b.naziv }}</td>
+            <td>{{ b.adresa }}</td>
+            <td>{{ b.budzet }}</td>
+            <td class="akcije-col">
+              <button
+                class="btn-ghost"
+                type="button"
+                (click)="edit(b)"
+              >
+                Izmeni
+              </button>
+              <button
+                class="btn-outline-danger"
+                type="button"
+                (click)="delete(b)"
+              >
+                Obriši
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="no-data" *ngIf="bolnice.length === 0">
+        Nema bolnica koje odgovaraju zadatoj pretrazi.
+      </div>
+    </div>
+  </section>
+
+</div>

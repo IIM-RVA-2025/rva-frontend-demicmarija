@@ -1,0 +1,213 @@
+<div class="pacijenti-page">
+
+  <h1 class="page-title">Pacijenti</h1>
+
+  <!-- prvo čekamo da se učitaju odeljenja i dijagnoze -->
+  <ng-container *ngIf="(odeljenja$ | async) as odeljenjaLista; else loading">
+    <ng-container *ngIf="(dijagnoze$ | async) as dijagnozeLista">
+
+      <!-- FORMA ZA DODAVANJE / IZMENE -->
+      <section class="card pacijent-form-card">
+        <div class="card-header-row">
+          <div>
+            <h2 class="card-title">
+              {{ editMode ? 'Izmena pacijenta' : 'Dodavanje novog pacijenta' }}
+            </h2>
+            <p class="card-subtitle">
+              Popuni polja i klikni na dugme
+              <strong>{{ editMode ? 'Sačuvaj' : 'Dodaj' }}</strong>.
+            </p>
+          </div>
+        </div>
+
+        <form class="form-grid" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+          <div class="field">
+            <label for="ime">Ime</label>
+            <input
+              id="ime"
+              type="text"
+              class="text-input"
+              placeholder="Unesi ime"
+              formControlName="ime"
+            />
+          </div>
+
+          <div class="field">
+            <label for="prezime">Prezime</label>
+            <input
+              id="prezime"
+              type="text"
+              class="text-input"
+              placeholder="Unesi prezime"
+              formControlName="prezime"
+            />
+          </div>
+
+          <div class="field">
+            <label for="godiste">Godište</label>
+            <input
+              id="godiste"
+              type="number"
+              class="text-input"
+              formControlName="godiste"
+            />
+          </div>
+
+          <div class="field checkbox-field">
+            <label class="checkbox-label" for="osiguranjeCheck">
+              Zdr. osiguranje
+            </label>
+            <div class="checkbox-wrapper">
+              <input
+                id="osiguranjeCheck"
+                type="checkbox"
+                formControlName="zdravstvenoOsiguranje"
+              />
+              <span>Ima osiguranje</span>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="odeljenje">Odeljenje</label>
+            <select
+              id="odeljenje"
+              class="text-input"
+              formControlName="odeljenjeId"
+            >
+              <option [ngValue]="null">– izaberi odeljenje –</option>
+              <option *ngFor="let o of odeljenjaLista" [value]="o.id">
+                {{ o.naziv }} ({{ o.bolnica?.naziv ?? 'bez bolnice' }})
+              </option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="dijagnoza">Dijagnoza</label>
+            <select
+              id="dijagnoza"
+              class="text-input"
+              formControlName="dijagnozaId"
+            >
+              <option [ngValue]="null">– izaberi dijagnozu –</option>
+              <option *ngFor="let d of dijagnozeLista" [value]="d.id">
+                {{ d.naziv }}
+              </option>
+            </select>
+          </div>
+
+          <!-- DUGMAD –  desno -->
+          <div class="field button-field">
+            <button type="submit" class="primary-btn">
+              {{ editMode ? 'Sačuvaj izmene' : 'Dodaj pacijenta' }}
+            </button>
+
+            <button
+              type="button"
+              class="secondary-btn"
+              *ngIf="editMode"
+              (click)="cancelEdit()"
+            >
+              Otkaži
+            </button>
+          </div>
+
+        </form>
+      </section>
+
+      
+      <section class="card pacijent-table-card">
+
+        <div class="table-top">
+          <div class="table-title-block">
+            <h2 class="card-title">Lista pacijenata</h2>
+            <p class="card-subtitle">
+              Pregled svih pacijenata sa mogućnošću pretrage, izmene i brisanja.
+            </p>
+          </div>
+
+          <div class="search-inline">
+            <label for="pretragaPac">
+              Pretraga (ime, prezime, odeljenje ili dijagnoza):
+            </label>
+            <input
+              id="pretragaPac"
+              type="text"
+              class="text-input"
+              placeholder="Kreni da kucaš..."
+              [formControl]="filterControl"
+            />
+          </div>
+        </div>
+
+        <div class="table-wrapper" *ngIf="pacijentiFiltrirani$ | async as pacijenti">
+          <table class="bolnica-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Ime</th>
+                <th>Prezime</th>
+                <th>Godište</th>
+                <th>Osiguran</th>
+                <th>Odeljenje</th>
+                <th>Dijagnoza</th>
+                <th class="akcije-col">Akcije</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let p of pacijenti">
+                <td>{{ p.id }}</td>
+                <td>{{ p.ime }}</td>
+                <td>{{ p.prezime }}</td>
+                <td>{{ p.godiste }}</td>
+                <td>
+                  <span
+                    class="status-pill status-yes"
+                    *ngIf="p.zdravstvenoOsiguranje"
+                  >
+                    DA
+                  </span>
+                  <span
+                    class="status-pill status-no"
+                    *ngIf="!p.zdravstvenoOsiguranje"
+                  >
+                    NE
+                  </span>
+                </td>
+                <td>{{ p.odeljenje?.naziv ?? '' }}</td>
+                <td>{{ p.dijagnoza?.naziv ?? '' }}</td>
+                <td class="akcije-col">
+                  <button
+                    type="button"
+                    class="btn-ghost"
+                    (click)="edit(p)"
+                  >
+                    Izmeni
+                  </button>
+                  <button
+                    type="button"
+                    class="btn-outline-danger"
+                    (click)="delete(p)"
+                  >
+                    Obriši
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="no-data" *ngIf="pacijenti.length === 0">
+            Nema pacijenata za zadatu pretragu.
+          </div>
+        </div>
+
+      </section>
+
+    </ng-container>
+  </ng-container>
+
+  <ng-template #loading>
+    Učitavanje podataka...
+  </ng-template>
+
+</div>

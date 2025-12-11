@@ -1,0 +1,243 @@
+.pacijenti-page {
+  min-height: 100vh;
+  padding: 2.5rem 5vw 3rem;
+}
+
+:host {
+  display: block;
+  background: #e6eef7;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Naslov */
+.page-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+}
+
+/* Kartice */
+.card {
+  background: white;
+  border-radius: 1.5rem;
+  padding: 1.75rem 2rem;
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+  margin-bottom: 1.5rem;
+}
+
+/* Zaglavlje */
+.card-header-row,
+.table-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1.5rem;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+.card-subtitle {
+  margin-top: 0.25rem;
+  color: #6b7280;
+  font-size: 0.9rem;
+}
+
+/* FORMA */
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem 1.25rem;
+  margin-top: 1.25rem;
+  align-items: end;
+}
+
+.field label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #4b5563;
+  margin-bottom: 0.35rem;
+}
+
+.text-input {
+  width: 100%;
+  padding: 0.55rem 0.9rem;
+  border-radius: 999px;
+  border: 1px solid #d1d5db;
+  background: #f9fafb;
+  font-size: 0.9rem;
+}
+
+.text-input:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 3px rgba(99,102,241,0.22);
+  background: white;
+}
+
+/* Checkbox osiguranje */
+.checkbox-field {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+
+.checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.checkbox-label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #4b5563;
+  margin-bottom: 0.25rem;
+}
+
+/* DUGMAD – isto kao bolnice */
+.button-field {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: flex-end;
+}
+
+.primary-btn {
+  padding: 0.6rem 1.6rem;
+  border-radius: 999px;
+  border: none;
+  background: #dc2626;
+  color: white;
+  cursor: pointer;
+  font-weight: 500;
+  box-shadow: 0 8px 22px rgba(220, 38, 38, 0.45);
+  transition: background-color 0.18s ease, transform 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.primary-btn:hover {
+  background: #b91c1c;
+  transform: translateY(-1px);
+  box-shadow: 0 12px 30px rgba(220, 38, 38, 0.55);
+}
+
+.secondary-btn {
+  padding: 0.6rem 1.4rem;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: white;
+  color: #374151;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.18s ease, color 0.18s ease,
+    box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.secondary-btn:hover {
+  background: #f3f4f6;
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(15, 23, 42, 0.18);
+}
+
+/* Status osiguranja da/ne */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.status-yes {
+  background: #dcfce7;
+  color: #166534;
+}
+
+.status-no {
+  background: #fee2e2;
+  color: #b91c1c;
+}
+
+/* Tabela */
+.table-wrapper {
+  margin-top: 1.25rem;
+  border-radius: 1rem;
+  overflow: hidden;
+}
+
+.bolnica-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bolnica-table thead {
+  background: #f3f4f6;
+}
+
+.bolnica-table th,
+.bolnica-table td {
+  padding: 0.6rem 1rem;
+}
+
+.akcije-col {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.btn-ghost,
+.btn-outline-danger {
+  padding: 0.35rem 0.8rem;
+  border-width: 1px;
+  border-style: solid;
+  cursor: pointer;
+  background: transparent;
+  font-size: 0.8rem;
+  border-radius: 0;
+  transition: background-color 0.16s ease, color 0.16s ease,
+    border-color 0.16s ease, transform 0.12s ease;
+}
+
+.btn-ghost {
+  border-color: #cbd5f5;
+  color: #4f46e5;
+  margin-right: 0.4rem;
+}
+
+.btn-ghost:hover {
+  background: #eef2ff;
+  transform: translateY(-1px);
+}
+
+.btn-outline-danger {
+  border-color: #fecaca;
+  color: #b91c1c;
+}
+
+.btn-outline-danger:hover {
+  background: #fee2e2;
+  transform: translateY(-1px);
+}
+
+/* Pretraga*/
+.search-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-width: 260px;
+}
+
+.search-inline label {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #4b5563;
+  margin: 0;
+  white-space: nowrap;
+}
+
+

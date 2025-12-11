@@ -1,0 +1,126 @@
+<div class="dijagnoze-page">
+
+  <h1 class="page-title">Dijagnoze</h1>
+
+  
+  <!-- KARTICA: FORMA ZA DODAVANJE / IZMENE -->
+
+  <section class="card dijagnoza-form-card">
+    <div class="card-header-row">
+      <div>
+        <h2 class="card-title">
+          {{ editMode ? 'Izmena dijagnoze' : 'Dodavanje nove dijagnoze' }}
+        </h2>
+        <p class="card-subtitle">
+          Popuni polja i klikni na dugme
+          <strong>{{ editMode ? 'Sačuvaj' : 'Dodaj' }}</strong>.
+        </p>
+      </div>
+    </div>
+
+    <form class="form-grid" [formGroup]="form" (ngSubmit)="onSubmit()">
+
+      <div class="field">
+        <label for="naziv">Naziv</label>
+        <input
+          id="naziv"
+          type="text"
+          class="text-input"
+          placeholder="Unesi naziv dijagnoze"
+          formControlName="naziv"
+        />
+      </div>
+
+      <div class="field opis-field">
+        <label for="opis">Opis</label>
+        <input
+          id="opis"
+          type="text"
+          class="text-input"
+          placeholder="Kratak opis dijagnoze"
+          formControlName="opis"
+        />
+      </div>
+
+      <div class="field button-field">
+        <button class="primary-btn" type="submit">
+          {{ editMode ? 'Sačuvaj' : 'Dodaj' }}
+        </button>
+
+        <button
+          *ngIf="editMode"
+          type="button"
+          class="secondary-btn"
+          (click)="cancelEdit()"
+        >
+          Otkaži
+        </button>
+      </div>
+
+    </form>
+  </section>
+
+  <!-- KARTICA: TABELA DIJAGNOZA -->
+  <section class="card dijagnoza-table-card">
+    <div class="table-top">
+      <div class="table-title-block">
+        <h2 class="card-title">Lista dijagnoza</h2>
+        <p class="card-subtitle">
+          Pregled svih dijagnoza sa mogućnošću pretrage, izmene i brisanja.
+        </p>
+      </div>
+
+      <div class="search-inline">
+        <label for="pretraga">Pretraga (naziv ili opis):</label>
+        <input
+          id="pretraga"
+          type="text"
+          class="text-input"
+          placeholder="Kreni da kucaš..."
+          [formControl]="filterControl"
+        />
+      </div>
+    </div>
+
+    <div class="table-wrapper" *ngIf="dijagnozeFiltrirane$ | async as dijagnoze">
+      <table class="bolnica-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Naziv</th>
+            <th>Opis</th>
+            <th class="akcije-col">Akcije</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let d of dijagnoze">
+            <td>{{ d.id }}</td>
+            <td>{{ d.naziv }}</td>
+            <td>{{ d.opis }}</td>
+            <td class="akcije-col">
+              <button
+                class="btn-ghost"
+                type="button"
+                (click)="edit(d)"
+              >
+                Izmeni
+              </button>
+              <button
+                class="btn-outline-danger"
+                type="button"
+                (click)="delete(d)"
+              >
+                Obriši
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="no-data" *ngIf="dijagnoze.length === 0">
+        Nema dijagnoza koje odgovaraju zadatoj pretrazi.
+      </div>
+    </div>
+  </section>
+
+</div>
